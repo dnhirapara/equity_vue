@@ -4,7 +4,7 @@
       <div class="card-header">
         <input type="text" v-on:keyup="searchDataBy" v-model="searchBy" />
         <div class="float-right">
-          <i class="fas fa-download"></i>
+          <i class="fas fa-download" v-on:click="downloadDataBy"></i>
         </div>
         <div v-if="isLoading">
           <i class="fas fa-sync-alt fa-spin"></i>
@@ -55,18 +55,36 @@ export default {
     return {
       searchBy: "",
       isLoading: true,
+      url: "",
     };
   },
+
   methods: {
-    ...mapActions(["fetchData", "searchData", "loadMore", "sortDataBy"]),
+    ...mapActions([
+      "fetchData",
+      "searchData",
+      "loadMore",
+      "sortDataBy",
+      "downloadCSV",
+    ]),
+
     searchDataBy() {
       this.searchData(this.searchBy);
     },
+
     sortData() {
-      this.sortDataBy("name");
+      this.sortDataBy("name", true);
+    },
+
+    async downloadDataBy() {
+      console.log(this.searchBy + " in main");
+      this.url = await this.downloadCSV(this.searchBy);
+      console.log(this.url);
     },
   },
+
   computed: mapGetters(["allData"]),
+
   mounted() {
     var ele = document.querySelector(".equity-table");
     ele.addEventListener("scroll", () => {
@@ -78,6 +96,7 @@ export default {
       }
     });
   },
+
   created() {
     console.log("called");
     this.isLoading = true;

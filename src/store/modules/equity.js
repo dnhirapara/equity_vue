@@ -15,13 +15,12 @@ const actions = {
         return new Promise((resolve) => setTimeout(resolve, time));
     },
     async fetchData({ commit }) {
-        const response = await axios.get('http://localhost:8000/api/?limit=30');
+        const response = await axios.get('http://localhost:8000/api/?limit=3000');
         commit('setData', response.data.data);
     },
     async loadMore({ commit }) {
         var _limit = parseInt(state.limit) + 10;
         const response = await axios.get(`http://localhost:8000/api/?limit=${_limit}`);
-        await actions.sleep(2000000).then(console.log("Time Complete."));
         commit('loadData', response.data.data.slice(state.limit, state.limit + 10));
     }
     ,
@@ -32,6 +31,9 @@ const actions = {
         }
         const response = await axios.get(`http://localhost:8000/api/?limit=105&search=${key}`);
         commit('setData', response.data.data);
+    },
+    async sortDataBy({ commit }, param) {
+        commit('sortData', param);
     }
 };
 
@@ -43,6 +45,10 @@ const mutations = {
     loadData: (state, data) => {
         state.data = state.data.concat(data);
         state.limit = state.data.length;
+    },
+    sortData: (state, param) => {
+        console.log(state.data.data[0]["name"]);
+        state.data = state.data.sort((a, b) => { return a[param] < b[param]; });
     }
 };
 

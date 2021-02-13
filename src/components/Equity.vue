@@ -3,6 +3,9 @@
     <div class="card">
       <div class="card-header">
         <input type="text" v-on:keyup="searchDataBy" v-model="searchBy" />
+        <div class="float-right">
+          <i class="fas fa-download"></i>
+        </div>
         <div v-if="isLoading">
           <i class="fas fa-sync-alt fa-spin"></i>
         </div>
@@ -10,10 +13,18 @@
       </div>
       <div class="card-body">
         <div class="table-responsive equity-table" ref="equity-table">
-          <table class="table table-bordered">
+          <table class="table table-bordered" id="equity-data">
             <thead class="thead-dark">
               <tr>
-                <th>NAME</th>
+                <th>
+                  NAME
+                  <span class="float-right">
+                    <i
+                      class="fas fa-sort-amount-down-alt"
+                      @click="sortData"
+                    ></i>
+                  </span>
+                </th>
                 <th>OPEN</th>
                 <th>HIGH</th>
                 <th>LOW</th>
@@ -47,9 +58,12 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["fetchData", "searchData", "loadMore"]),
+    ...mapActions(["fetchData", "searchData", "loadMore", "sortDataBy"]),
     searchDataBy() {
       this.searchData(this.searchBy);
+    },
+    sortData() {
+      this.sortDataBy("name");
     },
   },
   computed: mapGetters(["allData"]),
@@ -68,14 +82,14 @@ export default {
     console.log("called");
     this.isLoading = true;
     this.fetchData();
-    this.isLoading = true;
+    this.isLoading = false;
   },
 };
 </script>
 
 <style scoped>
 .equity-table {
-  max-height: 50vh;
+  max-height: 100vh;
   border: 2px solid green;
   border-radius: 20px;
   overflow-y: scroll;

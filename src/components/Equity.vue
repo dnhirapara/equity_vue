@@ -1,51 +1,23 @@
 <template>
   <div class="container">
-    <div class="card">
-      <div class="card-header">
-        <input type="text" v-on:keyup="searchDataBy" v-model="searchBy" />
-        <div class="float-right">
-          <i class="fas fa-download" v-on:click="downloadDataBy"></i>
-        </div>
-        <div v-if="isLoading">
-          <h1>{{ logs() }}</h1>
-          <p>spning</p>
-          <i class="fas fa-sync-alt fa-spin"></i>
-        </div>
-        <div v-else></div>
-      </div>
-      <div class="card-body">
-        <div class="table-responsive equity-table" ref="equity-table">
-          <table class="table table-bordered" id="equity-data">
-            <thead class="thead-dark">
-              <tr>
-                <th>
-                  NAME
-                  <span class="float-right">
-                    <i
-                      class="fas fa-sort-amount-down-alt"
-                      @click="sortData"
-                    ></i>
-                  </span>
-                </th>
-                <th>OPEN</th>
-                <th>HIGH</th>
-                <th>LOW</th>
-                <th>CLOSE</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="val in allData" :key="val.id">
-                <td>{{ val.name }}</td>
-                <td>{{ val.open }}</td>
-                <td>{{ val.high }}</td>
-                <td>{{ val.low }}</td>
-                <td>{{ val.close }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    <v-app>
+      <v-text-field
+        v-model="searchBy"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+      <v-data-table
+        :headers="headers"
+        :items="allData"
+        :custom-filter="toRupees"
+        :items-per-page="5"
+        :loading="isLoading"
+        :search="searchBy"
+        class="elevation-1"
+      ></v-data-table>
+    </v-app>
   </div>
 </template>
 
@@ -58,6 +30,18 @@ export default {
       searchBy: "",
       isLoading: true,
       url: "",
+      headers: [
+        {
+          text: "Name",
+          align: "start",
+          sortable: false,
+          value: "name",
+        },
+        { text: "Open", value: "open" },
+        { text: "High", value: "high" },
+        { text: "Low", value: "low" },
+        { text: "Close", value: "close" },
+      ],
     };
   },
 
@@ -69,6 +53,11 @@ export default {
       "sortDataBy",
       "downloadCSV",
     ]),
+
+    toggleLoding() {
+      console.log(this.isLoading);
+      this.isLoading = !this.isLoading;
+    },
 
     logs() {
       console.log("spningdldkjd");
@@ -93,14 +82,14 @@ export default {
 
   mounted() {
     var ele = document.querySelector(".equity-table");
-    ele.addEventListener("scroll", () => {
+    ele.addEventListener("scroll", async () => {
       if (ele.scrollTop + ele.clientHeight >= ele.scrollHeight) {
         this.isLoading = true;
         console.log(this.isLoading);
         for (var i = 0; i < 1100000; i++) {
           i = i + 0;
         }
-        this.loadMore();
+        await this.loadMore();
         this.isLoading = false;
         console.log(this.isLoading);
         console.log(ele.scrollHeight);
@@ -108,11 +97,25 @@ export default {
     });
   },
 
-  created() {
+  async created() {
     console.log("called");
     this.isLoading = true;
-    this.loadMore();
-    this.isLoading = true;
+    await this.loadMore();
+    this.isLoading = false;
+  },
+
+  filters: {
+    toRupees: (open) => {
+      if (typeof open !== "number") {
+        return open;
+      }
+      var formatter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 0,
+      });
+      return formatter.format(open);
+    },
   },
 };
 </script>

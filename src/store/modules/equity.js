@@ -16,13 +16,13 @@ const actions = {
         return new Promise((resolve) => setTimeout(resolve, time));
     },
     async fetchData({ commit }) {
-        const response = await axios.get('http://localhost:8000/api/?limit=30');
+        const response = await axios.get('http://localhost:8000/api/?limit=3000');
         commit('setData', response.data.data);
     },
     async loadMore({ commit }) {
-        var _limit = parseInt(state.limit) + 10;
+        var _limit = parseInt(state.limit) + 300;
         const response = await axios.get(`http://localhost:8000/api/?limit=${_limit}`);
-        commit('loadData', response.data.data.slice(state.limit, state.limit + 10));
+        commit('loadData', response.data.data.slice(state.limit, state.limit + 300));
     }
     ,
     async searchData({ commit }, key) {

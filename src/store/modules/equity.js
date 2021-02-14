@@ -31,7 +31,7 @@ const actions = {
         } else {
             response = await axios.get(`/api/?limit=${_limit}&offset=${state.limit}&search=${searchBy}`)
         }
-        console.log(response.data);
+        // console.log(response.data);
         state.date = new Date(response.data.date).toLocaleString("en-US");
         state.total = response.data.total;
         commit('loadData', response.data.data);
@@ -40,7 +40,7 @@ const actions = {
     }
     ,
     async searchData({ commit }, key) {
-        console.log(key);
+        // console.log(key);
         state.limit = 0;
         var _limit = parseInt(state.limit) + state.dataPerScroll;
         if (key == "") {
@@ -50,19 +50,19 @@ const actions = {
         commit('setData', response.data.data);
     },
     async sortDataBy({ commit }, payload) {
-        console.log(payload.field);
-        console.log(payload.reverse);
+        // console.log(payload.field);
+        // console.log(payload.reverse);
         await commit('sortData', payload);
     },
     async downloadCSV({ commit }, payload) {
-        console.log(payload);
+        // console.log(payload);
         var key = payload.key;
         if (key == "" || key == null || key == undefined) {
             key = "*"
         }
-        console.log(key);
+        // console.log(key);
         const response = await axios.get(`/api/getcsv/${key}`);
-        console.log(response.data);
+        // console.log(response.data);
         commit('dummy', response.data.url);
         return response.data;
     }
@@ -83,28 +83,28 @@ const mutations = {
     sortData: (state, payload) => {
         var param = payload.field;
         var reverse = payload.reverse;
-        console.log(`Reverse${reverse}`);
+        // console.log(`Reverse${reverse}`);
         if (state.data.length == 0) {
             return;
         }
-        console.log(state.data[0]["name"]);
+        // console.log(state.data[0]["name"]);
         if (isNaN(state.data[0][param])) {
-            console.log(reverse);
-            console.log(state.data[0][param] + " if " + param);
+            // console.log(reverse);
+            // console.log(state.data[0][param] + " if " + param);
             if (reverse == true) {
                 state.data = state.data.sort((lhs, rhs) => { return lhs[param] < rhs[param]; });
             } else {
                 state.data = state.data.sort((lhs, rhs) => { return lhs[param] > rhs[param] })
             }
         } else {
-            console.log(state.data[0][param] + " else " + param);
+            // console.log(state.data[0][param] + " else " + param);
             if (reverse == true) {
                 state.data = state.data.sort((lhs, rhs) => { return parseFloat(lhs[param]) < parseFloat(rhs[param]); });
             } else {
                 state.data = state.data.sort((lhs, rhs) => { return parseFloat(lhs[param]) > parseFloat(rhs[param]) })
             }
         }
-        console.log(state.data);
+        // console.log(state.data);
     }
 };
 

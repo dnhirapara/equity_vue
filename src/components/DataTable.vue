@@ -165,9 +165,7 @@ export default {
       <pre>
       Enter search text to find data.
       Click on generate csv to generate and download searched data in csv format.
-      To download all data clear search field and then generate csv file.
-      </pre>
-      `,
+      To download all data clear search field and then generate csv file.</pre>`,
       url: "",
       alertType: "success",
       filePreparing: false,
@@ -193,7 +191,7 @@ export default {
     sleeps: async (time) => {
       return await new Promise(() =>
         setTimeout(() => {
-          console.log(`Time after ${time}`);
+          // console.log(`Time after ${time}`);
         }, time)
       );
     },
@@ -201,7 +199,7 @@ export default {
     async searchDataBy() {
       this.loading = true;
       this.isFileAvailable = false;
-      console.log(this.searchBy);
+      // console.log(this.searchBy);
       await this.searchData(this.searchBy);
       this.loading = false;
     },
@@ -213,7 +211,7 @@ export default {
     async toggleSort(field) {
       this.loading = true;
       this.sort[field] = !this.sort[field];
-      console.log(this.sort[field]);
+      // console.log(this.sort[field]);
       await this.sortDataBy({ field: field, reverse: this.sort[field] });
       this.loading = false;
     },
@@ -228,7 +226,7 @@ export default {
         this.alertMsg = "Data with this key is not available.........";
         return;
       }
-      console.log(this.url);
+      // console.log(this.url);
       if (this.url != "" && this.url != null && this.url != undefined) {
         this.isFileAvailable = true;
       }
@@ -237,7 +235,7 @@ export default {
     },
 
     downloadFile() {
-      console.log("Download File");
+      // console.log("Download File");
     },
   },
 
@@ -251,22 +249,22 @@ export default {
 
   mounted() {
     var ele = document.querySelector(".card-body");
-    console.log(ele);
+    // console.log(ele);
     if (ele != null) {
       ele.addEventListener("scroll", async () => {
-        console.log("Scrolling....");
+        // console.log("Scrolling....");
         if (ele.scrollTop + ele.clientHeight + 1 >= ele.scrollHeight) {
           this.loading = true;
-          console.log(this.loading);
+          // console.log(this.loading);
           await this.loadMore(this.searchBy);
           this.loading = false;
-          console.log(this.loading);
-          console.log(
-            ele.scrollTop + " " + ele.clientHeight + " " + ele.scrollHeight
-          );
-          console.log(
-            ele.scrollTop + ele.clientHeight + " " + ele.scrollHeight
-          );
+          // console.log(this.loading);
+          // console.log(
+          //   ele.scrollTop + " " + ele.clientHeight + " " + ele.scrollHeight
+          // );
+          // console.log(
+          //   ele.scrollTop + ele.clientHeight + " " + ele.scrollHeight
+          // );
         }
       });
     }

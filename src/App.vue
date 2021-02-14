@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <div class="container">
-      <Equity />
-    </div>
+    <Equity />
   </div>
 </template>
 
@@ -18,4 +16,9 @@ export default {
 </script>
 
 <style>
+#app {
+  height: 100vh;
+  overflow-y: auto;
+  background: #004f79;
+}
 </style>

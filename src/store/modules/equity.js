@@ -1,51 +1,70 @@
 import axios from "axios";
 
+axios.defaults.baseURL = "http://localhost:8000"
 const state = {
     data: [],
+    dataPerScroll: 100,
     limit: 0,
+    date: '',
+    total: 0,
 };
 
 const getters = {
     allData: (state) => state.data,
-    // allData: (state) => state.data.sort((a, b) => { return a.name > b.name }),
-    // sortData: (state) => state.data.sort(),
+    lastDate: (state) => state.date,
+    totalEntry: (state) => state.total,
 };
 
 const actions = {
     async sleep(time) {
-        return new Promise((resolve) => setTimeout(resolve, time));
+        return await new Promise((resolve) => setTimeout(resolve, time));
     },
     async fetchData({ commit }) {
-        const response = await axios.get('http://localhost:8000/api/?limit=3000');
+        const response = await axios.get('/api/?limit=30');
         commit('setData', response.data.data);
     },
-    async loadMore({ commit }) {
-        var _limit = parseInt(state.limit) + 300;
-        const response = await axios.get(`http://localhost:8000/api/?limit=${_limit}`);
-        commit('loadData', response.data.data.slice(state.limit, state.limit + 300));
+    async loadMore({ commit }, searchBy) {
+        var _limit = parseInt(state.limit) + state.dataPerScroll;
+        var response;
+        if (searchBy == null || searchBy == undefined || searchBy == '') {
+            response = await axios.get(`/api/?limit=${_limit}&offset=${state.limit}`);
+        } else {
+            response = await axios.get(`/api/?limit=${_limit}&offset=${state.limit}&search=${searchBy}`)
+        }
+        console.log(response.data);
+        state.date = new Date(response.data.date).toLocaleString("en-US");
+        state.total = response.data.total;
+        commit('loadData', response.data.data);
+        // commit('loadData', response.data.data.slice(state.limit, state.limit + state.dataPerScroll));
+        return response;
     }
     ,
     async searchData({ commit }, key) {
         console.log(key);
+        state.limit = 0;
+        var _limit = parseInt(state.limit) + state.dataPerScroll;
         if (key == "") {
             key = "*"
         }
-        const response = await axios.get(`http://localhost:8000/api/?limit=105&search=${key}`);
+        const response = await axios.get(`/api/?limit=${_limit}&offset=${state.limit}&search=${key}`);
         commit('setData', response.data.data);
     },
-    async sortDataBy({ commit }, param, reverse = false) {
-        console.log(state.data);
-        commit('sortData', param, reverse);
+    async sortDataBy({ commit }, payload) {
+        console.log(payload.field);
+        console.log(payload.reverse);
+        await commit('sortData', payload);
     },
-    async downloadCSV({ commit }, key) {
-        console.log(key);
+    async downloadCSV({ commit }, payload) {
+        console.log(payload);
+        var key = payload.key;
         if (key == "" || key == null || key == undefined) {
-            return;
+            key = "*"
         }
         console.log(key);
-        const response = await axios.get(`http://localhost:8000/api/getcsv/${key}`);
-        commit('dummy', response.data['url']);
-        return response.data["url"];
+        const response = await axios.get(`/api/getcsv/${key}`);
+        console.log(response.data);
+        commit('dummy', response.data.url);
+        return response.data;
     }
 };
 
@@ -61,18 +80,24 @@ const mutations = {
         state.data = state.data.concat(data);
         state.limit = state.data.length;
     },
-    sortData: (state, param, reverse) => {
+    sortData: (state, payload) => {
+        var param = payload.field;
+        var reverse = payload.reverse;
+        console.log(`Reverse${reverse}`);
         if (state.data.length == 0) {
             return;
         }
         console.log(state.data[0]["name"]);
         if (isNaN(state.data[0][param])) {
+            console.log(reverse);
+            console.log(state.data[0][param] + " if " + param);
             if (reverse == true) {
                 state.data = state.data.sort((lhs, rhs) => { return lhs[param] < rhs[param]; });
             } else {
                 state.data = state.data.sort((lhs, rhs) => { return lhs[param] > rhs[param] })
             }
         } else {
+            console.log(state.data[0][param] + " else " + param);
             if (reverse == true) {
                 state.data = state.data.sort((lhs, rhs) => { return parseFloat(lhs[param]) < parseFloat(rhs[param]); });
             } else {

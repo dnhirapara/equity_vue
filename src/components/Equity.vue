@@ -7,6 +7,8 @@
           <i class="fas fa-download" v-on:click="downloadDataBy"></i>
         </div>
         <div v-if="isLoading">
+          <h1>{{ logs() }}</h1>
+          <p>spning</p>
           <i class="fas fa-sync-alt fa-spin"></i>
         </div>
         <div v-else></div>
@@ -68,6 +70,10 @@ export default {
       "downloadCSV",
     ]),
 
+    logs() {
+      console.log("spningdldkjd");
+    },
+
     searchDataBy() {
       this.searchData(this.searchBy);
     },
@@ -90,8 +96,13 @@ export default {
     ele.addEventListener("scroll", () => {
       if (ele.scrollTop + ele.clientHeight >= ele.scrollHeight) {
         this.isLoading = true;
+        console.log(this.isLoading);
+        for (var i = 0; i < 1100000; i++) {
+          i = i + 0;
+        }
         this.loadMore();
         this.isLoading = false;
+        console.log(this.isLoading);
         console.log(ele.scrollHeight);
       }
     });
@@ -100,8 +111,8 @@ export default {
   created() {
     console.log("called");
     this.isLoading = true;
-    this.fetchData();
-    this.isLoading = false;
+    this.loadMore();
+    this.isLoading = true;
   },
 };
 </script>

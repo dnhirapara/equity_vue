@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div
-      class="alert"
+      class="alert mt-1"
       v-bind:class="'alert-' + alertType"
       role="alert"
       v-if="isAlert"
@@ -12,7 +12,7 @@
       ></i>
       <div v-html="alertMsg" class="d-flex"></div>
     </div>
-    <div class="card mt-1">
+    <div class="card mt-1 mb-1">
       <div class="card-header">
         <div class="row">
           <div class="col">

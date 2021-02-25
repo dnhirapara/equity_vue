@@ -295,7 +295,7 @@ table {
 }
 
 td,
-th {
+th{
   background: #caf0f8;
   color: black;
   border: 1px solid white;
@@ -307,12 +307,16 @@ th {
   background: #023e8a;
   border-color: #023e8a;
 }
+.downloadBtn {
+  background: #caf0f8;
+  border-color: #0081a7;
+}
 th {
   background-color: #022249;
   color: white;
 }
 .card-body {
-  max-height: 80vh;
+  max-height: 75vh;
   overflow-y: scroll;
 }
 .fa-spinner {

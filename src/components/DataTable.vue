@@ -307,19 +307,18 @@ th {
   background: #023e8a;
   border-color: #023e8a;
 }
-.downloadBtn {
-  background: #0081a7;
-  border-color: #0081a7;
-}
 th {
   background-color: #022249;
   color: white;
 }
 .card-body {
-  max-height: 75vh;
+  max-height: 80vh;
   overflow-y: scroll;
 }
 .fa-spinner {
   color: #ff9045;
+}
+a{
+  text-decoration: none;
 }
 </style>

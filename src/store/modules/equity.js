@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// axios.defaults.baseURL = "https://bhavcopy-1.herokuapp.com"
-axios.defaults.baseURL = "http://localhost:1337"
+axios.defaults.baseURL = "https://bhavcopy-1.herokuapp.com"
+// axios.defaults.baseURL = "http://localhost:1337"
 const state = {
     data: [],
     dataPerScroll: 100,

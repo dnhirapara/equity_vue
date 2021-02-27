@@ -8,6 +8,7 @@ const state = {
     limit: 0,
     date: '',
     total: 0,
+    entire_total: 1,
 };
 
 const getters = {
@@ -27,6 +28,9 @@ const actions = {
         commit('setData', response.data.data);
     },
     async loadMore({ commit }, searchBy) {
+        if(total>=entire_total){
+            return 0;
+        }
         var _limit = parseInt(state.limit) + state.dataPerScroll;
         var response;
         if (searchBy == null || searchBy == undefined || searchBy == '') {
@@ -37,9 +41,10 @@ const actions = {
         // console.log(response.data);
         state.date = new Date(response.data.date).toLocaleString("en-US");
         state.total = response.data.total;
+        state.entire_total = response.data.entire_total;
         commit('loadData', response.data.data);
         // commit('loadData', response.data.data.slice(state.limit, state.limit + state.dataPerScroll));
-        return response;
+        return 1;
     }
     ,
     async searchData({ commit }, key) {

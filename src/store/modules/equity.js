@@ -1,6 +1,7 @@
 import axios from "axios";
 
-axios.defaults.baseURL = "https://bhavcopy-1.herokuapp.com"
+// axios.defaults.baseURL = "https://bhavcopy-1.herokuapp.com"
+axios.defaults.baseURL = "http://localhost:1337"
 const state = {
     data: [],
     dataPerScroll: 100,
@@ -20,7 +21,9 @@ const actions = {
         return await new Promise((resolve) => setTimeout(resolve, time));
     },
     async fetchData({ commit }) {
-        const response = await axios.get('/api/?limit=30');
+        const response = await axios.get('/api/');
+        state.date = new Date(response.data.date).toLocaleString("en-US");
+        state.total = response.data.total;
         commit('setData', response.data.data);
     },
     async loadMore({ commit }, searchBy) {
@@ -74,13 +77,14 @@ const mutations = {
     },
     setData: (state, data) => {
         state.data = data,
-            state.limit = state.data.length;
+        state.limit = state.data.length;
     },
     loadData: (state, data) => {
         state.data = state.data.concat(data);
         state.limit = state.data.length;
     },
     sortData: (state, payload) => {
+        console.log("Sorting Data.........");
         var param = payload.field;
         var reverse = payload.reverse;
         // console.log(`Reverse${reverse}`);

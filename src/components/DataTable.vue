@@ -133,15 +133,22 @@
         <!-- card-body -->
       </div>
       <div class="card-footer">
-        <div class="text-dark">
-          <button type="button" class="btn btn-dark" aria-disabled="true">
-            <span class="text-light">Last Fetched On: </span>
-            <span class="badge bg-info">{{ lastDate }}</span>
-          </button>
-          <!-- <div class="float-right">
-            Total Entries:
-            <span class="badge rounded-pill bg-primary">{{ totalEntry }}</span>
-          </div> -->
+        <div class="row">
+          <div class="col">
+            <div class="text-dark">
+              <button type="button" class="btn btn-dark" aria-disabled="true">
+                <span class="text-light">Last Fetched On: </span>
+                <span class="badge bg-info">{{ lastDate }}</span>
+              </button>
+              <!-- <div class="float-right">
+                Total Entries:
+                <span class="badge rounded-pill bg-primary">{{ totalEntry }}</span>
+              </div> -->
+            </div>
+          </div>
+          <div class="col-md-2 text-center">
+            <button class="btn btn-success" v-on:click="loadAllData()">Load All</button>
+          </div>
         </div>
       </div>
       <!-- card -->
@@ -191,7 +198,7 @@ export default {
     sleeps: async (time) => {
       return await new Promise(() =>
         setTimeout(() => {
-          // console.log(`Time after ${time}`);
+          console.log(`Time after ${time}`);
         }, time)
       );
     },
@@ -208,11 +215,19 @@ export default {
       this.isAlert = false;
     },
 
+    async loadAllData(){
+      this.loading = true;
+      await this.fetchData();
+      this.loading = false;
+    },
+
     async toggleSort(field) {
       this.loading = true;
+      console.log(this.loading);
       this.sort[field] = !this.sort[field];
-      // console.log(this.sort[field]);
+      console.log(this.sort[field]+" Hello"+this.loading);
       await this.sortDataBy({ field: field, reverse: this.sort[field] });
+      console.log("Hi after sorting");
       this.loading = false;
     },
 
@@ -235,7 +250,7 @@ export default {
     },
 
     downloadFile() {
-      // console.log("Download File");
+      console.log("Download File");
     },
   },
 
@@ -249,22 +264,12 @@ export default {
 
   mounted() {
     var ele = document.querySelector(".card-body");
-    // console.log(ele);
     if (ele != null) {
       ele.addEventListener("scroll", async () => {
-        // console.log("Scrolling....");
         if (ele.scrollTop + ele.clientHeight + 1 >= ele.scrollHeight) {
           this.loading = true;
-          // console.log(this.loading);
           await this.loadMore(this.searchBy);
           this.loading = false;
-          // console.log(this.loading);
-          // console.log(
-          //   ele.scrollTop + " " + ele.clientHeight + " " + ele.scrollHeight
-          // );
-          // console.log(
-          //   ele.scrollTop + ele.clientHeight + " " + ele.scrollHeight
-          // );
         }
       });
     }

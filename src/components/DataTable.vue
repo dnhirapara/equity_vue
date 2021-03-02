@@ -119,12 +119,12 @@
           <tbody>
             <tr v-for="i in allData" :key="i.id">
               <td>
-                {{ i.name }}
+                {{ i.NAME }}
               </td>
-              <td>{{ i.open | currency }}</td>
-              <td>{{ i.high | currency }}</td>
-              <td>{{ i.low | currency }}</td>
-              <td>{{ i.close | currency }}</td>
+              <td>{{ i.OPEN | currency }}</td>
+              <td>{{ i.HIGH | currency }}</td>
+              <td>{{ i.LOW | currency }}</td>
+              <td>{{ i.CLOSE | currency }}</td>
             </tr>
             <!-- tbody -->
           </tbody>

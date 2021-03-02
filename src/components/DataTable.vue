@@ -214,6 +214,7 @@ export default {
 
     async loadAllData(){
       this.loading = true;
+      this.isFileAvailable = false;
       await this.fetchData(this.searchBy);
       this.loading = false;
     },

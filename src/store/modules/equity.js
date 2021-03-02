@@ -8,34 +8,46 @@ const state = {
     limit: 0,
     date: '',
     total: 0,
-    entire_total: 1,
+    entire_total: 0,
 };
 
 const getters = {
     allData: (state) => state.data,
     lastDate: (state) => state.date,
-    totalEntry: (state) => state.total,
+    totalEntry: (state) => state.limit,
+    entireTotal:(state) => state.entire_total,
 };
 
 const actions = {
     async sleep(time) {
         return await new Promise((resolve) => setTimeout(resolve, time));
     },
-    async fetchData({ commit }) {
-        const response = await axios.get('/api/');
+    async fetchData({ commit }, searchBy) {
+        var response;
+        if (searchBy == null || searchBy == undefined || searchBy == '') {
+            response = await axios.get(`/api/`);
+        } else {
+            console.log(searchBy);
+            response = await axios.get(`/api/?search=${searchBy}`)
+        }
         state.date = new Date(response.data.date).toLocaleString("en-US");
         state.total = response.data.total;
+        state.entire_total = response.data.entire_total;
         commit('setData', response.data.data);
     },
     async loadMore({ commit }, searchBy) {
-        if(total>=entire_total){
+        console.log("Loading...");
+        if(state.limit>=state.entire_total && state.limit != 0){
+            console.log("All Data Fetched.");
             return 0;
         }
+        console.log("Loading More...");
         var _limit = parseInt(state.limit) + state.dataPerScroll;
         var response;
         if (searchBy == null || searchBy == undefined || searchBy == '') {
             response = await axios.get(`/api/?limit=${_limit}&offset=${state.limit}`);
         } else {
+            console.log(searchBy);
             response = await axios.get(`/api/?limit=${_limit}&offset=${state.limit}&search=${searchBy}`)
         }
         // console.log(response.data);
@@ -55,6 +67,7 @@ const actions = {
             key = "*"
         }
         const response = await axios.get(`/api/?limit=${_limit}&offset=${state.limit}&search=${key}`);
+        state.entire_total = response.data.entire_total;
         commit('setData', response.data.data);
     },
     async sortDataBy({ commit }, payload) {

@@ -15,7 +15,7 @@
     <div class="card mt-1 mb-1">
       <div class="card-header">
         <div class="row">
-          <div class="col">
+          <div class="col mb-1">
             <div class="input-group col">
               <div class="input-group-prepend">
                 <span class="input-group-text">
@@ -33,7 +33,7 @@
             </div>
             <!-- col -->
           </div>
-          <div class="col-md-2 align-self-center d-flex justify-content-center">
+          <div class="col-md-2 align-self-center d-flex justify-content-center mb-1">
             <button
               class="btn btn-success mr-1 generateBtn"
               v-if="!isFileAvailable"
@@ -133,8 +133,8 @@
         <!-- card-body -->
       </div>
       <div class="card-footer">
-        <div class="row">
-          <div class="col">
+        <div class="row justify-content-between">
+          <div class="col-md-5 text-center mb-1">
             <div class="text-dark">
               <button type="button" class="btn btn-dark" aria-disabled="true">
                 <span class="text-light">Last Fetched On: </span>
@@ -146,8 +146,8 @@
               </div> -->
             </div>
           </div>
-          <div class="col-md-2 text-center">
-            <button class="btn btn-success" v-on:click="loadAllData()">Load All</button>
+          <div class="col-md-3 text-center mb-1">
+            <button class="btn btn-success" v-on:click="loadAllData()"><span class="badge rounded-pill bg-dark">{{totalEntry}} of {{entireTotal}}</span> <span>Load All</span></button>
           </div>
         </div>
       </div>
@@ -169,10 +169,7 @@ export default {
       loading: false,
       isAlert: true,
       alertMsg: `
-      <pre>
-      Enter search text to find data.
-      Click on generate csv to generate and download searched data in csv format.
-      To download all data clear search field and then generate csv file.</pre>`,
+      <pre>Enter search text to find data.<br/>Click on 'Generate CSV' to generate and download searched data in csv format.<br/>To download all data clear search field and then 'Generate CSV' file.<br/>Click On 'Load All' to fetch all data.</pre>`,
       url: "",
       alertType: "success",
       filePreparing: false,
@@ -217,7 +214,7 @@ export default {
 
     async loadAllData(){
       this.loading = true;
-      await this.fetchData();
+      await this.fetchData(this.searchBy);
       this.loading = false;
     },
 
@@ -254,9 +251,10 @@ export default {
     },
   },
 
-  computed: mapGetters(["allData", "lastDate", "totalEntry"]),
+  computed: mapGetters(["allData", "lastDate", "totalEntry","entireTotal"]),
 
   async created() {
+    console.log("Application Loaded.");
     this.loading = true;
     await this.loadMore();
     this.loading = false;
@@ -325,9 +323,14 @@ th {
   overflow-y: scroll;
 }
 .fa-spinner {
-  color: #ff9045;
+  color: #FF9045;
 }
 a{
   text-decoration: none;
+}
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  text-align: justify;
 }
 </style>

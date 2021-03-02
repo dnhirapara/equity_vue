@@ -230,6 +230,7 @@ export default {
     },
 
     async generateCSV() {
+      this.loading = true;
       this.filePreparing = true;
       const data = await this.downloadCSV({ key: this.searchBy });
       this.url = data.url;
@@ -245,6 +246,7 @@ export default {
       }
       this.url = "http://" + this.url;
       this.filePreparing = false;
+      this.loading = false;
     },
 
     downloadFile() {

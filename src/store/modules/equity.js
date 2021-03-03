@@ -103,7 +103,7 @@ const mutations = {
     },
     sortData: (state, payload) => {
         console.log("Sorting Data.........");
-        var param = payload.field;
+        var param = payload.field.toUpperCase();
         var reverse = payload.reverse;
         // console.log(`Reverse${reverse}`);
         if (state.data.length == 0) {

@@ -264,7 +264,7 @@ export default {
   },
 
   mounted() {
-    setTimeout(()=>{this.isAlert = false;}, 10000);
+    setTimeout(()=>{this.isAlert = false;}, 60000);
     var ele = document.querySelector(".card-body");
     if (ele != null) {
       ele.addEventListener("scroll", async () => {

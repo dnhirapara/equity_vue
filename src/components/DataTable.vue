@@ -237,7 +237,8 @@ export default {
       if (data.error != null && data.error != undefined) {
         this.isAlert = true;
         this.alertType = "danger";
-        this.alertMsg = "Data with this key is not available.........";
+        this.alertMsg = "Data with this key is not available.";
+        this.loading = false;
         return;
       }
       // console.log(this.url);
